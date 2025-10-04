@@ -9,15 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 👇 ESTE ES EL PUNTO CLAVE: hacer checkout del repo que llama al workflow
-      - name: Checkout del código del proyecto
-        uses: actions/checkout@v4
-        with:
-          # Esto hace que se clone el código del repo que INVOCÓ este workflow,
-          # no el repo 'Refiplatform/coverage'
-          repository: ${{ github.event.repository.full_name }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
@@ -39,11 +30,3 @@ jobs:
         run: |
           echo "✅ Tests ejecutados con éxito."
           echo "📊 Reporte disponible como artefacto: coverage-report"
-
-  quality-gate:
-    name: Validar gate de calidad
-    needs: test
-    runs-on: ubuntu-latest
-    if: ${{ success() }}
-    steps:
-      - run: echo "✅ Gate de calidad aprobado — se puede desplegar."
