@@ -19,7 +19,7 @@ runs:
 
     - name: Ejecutar Jest con cobertura
       shell: bash
-      run: npm test -- --coverage
+      run: npx jest --coverage
 
     - name: Subir reporte de cobertura
       uses: actions/upload-artifact@v4
