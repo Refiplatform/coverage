@@ -7,7 +7,7 @@ on:
 jobs:
   # 1️⃣ Ejecuta tests y coverage usando el template central
   coverage:
-    uses: Refiplatform/coverage-template/.github/workflows/coverage.yml@main
+    uses: Refiplatform/coverage/.github/workflows/coverage.yml@main
 
   # 2️⃣ Despliega solo si los tests pasan
   deploy-stage:
