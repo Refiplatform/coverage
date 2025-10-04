@@ -1,0 +1,42 @@
+name: Test & Coverage
+
+on:
+  workflow_call:
+
+jobs:
+  test:
+    name: Ejecutar pruebas y validar cobertura
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Ejecutar Jest con cobertura
+        run: npm test -- --coverage
+
+      - name: Subir reporte de cobertura
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage
+
+      - name: Verificar resultados
+        run: |
+          echo "✅ Tests ejecutados con éxito."
+          echo "📊 Reporte disponible como artefacto: coverage-report"
+
+  quality-gate:
+    name: Validar gate de calidad
+    needs: test
+    runs-on: ubuntu-latest
+    if: \${{ success() }}
+    steps:
+      - run: echo "✅ Gate de calidad aprobado — se puede desplegar."
