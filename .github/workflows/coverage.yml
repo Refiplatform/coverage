@@ -9,29 +9,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+     
+        # 👇 Este checkout trae el código del repo que llamó al workflow (no el del template)
+        - name: Checkout del código del proyecto
+          uses: actions/checkout@v4
+          with:
+            repository: ${{ github.repository }}
+            token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Configurar Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
+        - name: Configurar Node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: 20
 
-      - name: Instalar dependencias
-        run: npm install
+        - name: Instalar dependencias
+          run: npm install
 
-      - name: Ejecutar Jest con cobertura
-        run: npm test -- --coverage
+        - name: Ejecutar Jest con cobertura
+          run: npm test -- --coverage
 
-      - name: Subir reporte de cobertura
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage
+        - name: Subir reporte de cobertura
+          uses: actions/upload-artifact@v4
+          with:
+            name: coverage-report
+            path: coverage
 
-      - name: Verificar resultados
-        run: |
-          echo "✅ Tests ejecutados con éxito."
-          echo "📊 Reporte disponible como artefacto: coverage-report"
+        - name: Verificar resultados
+          run: |
+            echo "✅ Tests ejecutados con éxito."
+            echo "📊 Reporte disponible como artefacto: coverage-report"
 
   quality-gate:
     name: Validar gate de calidad
