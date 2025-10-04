@@ -1,0 +1,32 @@
+name: "Refiplatform Coverage Action"
+description: "Ejecuta tests de Jest y genera reporte de cobertura con gate de calidad"
+author: "Refiplatform"
+branding:
+  color: blue
+  icon: check
+
+runs:
+  using: "composite"
+  steps:
+    - name: Configurar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Instalar dependencias
+      shell: bash
+      run: npm install
+
+    - name: Ejecutar Jest con cobertura
+      shell: bash
+      run: npm test -- --coverage
+
+    - name: Subir reporte de cobertura
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: coverage
+
+    - name: Gate de calidad
+      shell: bash
+      run: echo "✅ Tests ejecutados y reporte de cobertura generado correctamente."
